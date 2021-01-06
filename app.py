@@ -14,7 +14,7 @@ url = "https://data.ontario.ca/dataset/f4f86e54-872d-43f8-8a86-3892fd3cb5e6/reso
 
 df = pd.read_csv(url)
 df["Daily Cases"] = df["Total Cases"].diff()
-df["7-Day Moving Avg."] = df["Daily Cases"].rolling(7).mean()
+df["7-Day Daily Moving Avg."] = df["Daily Cases"].rolling(7).mean()
 
 heading_style = {"textAlign" : "center"}
 
@@ -22,26 +22,20 @@ app.layout = html.Div([
     html.H1("Ontario COVID-19 Data", style=heading_style),
     html.H2("Daily Cases", style=heading_style),
     dcc.Graph(
-        id='Graph1',
+        id='daily-cases',
         figure={
             'data': [
                 go.Bar(
                     x=df["Reported Date"],
                     y=df["Daily Cases"],
-                    #text=df[df['continent'] == i]['country'],
-                    #mode='lines',
                     opacity=0.8,
-                    #marker={
-                    #    'size': 15,
-                    #    'line': {'width': 0.5, 'color': 'white'}
-                    #},
-                    name="Confirmed Positive"
+                    name="Daily Cases"
                 ),
                 go.Scatter(
                     x=df["Reported Date"],
-                    y=df["7-Day Moving Avg."],
+                    y=df["7-Day Daily Moving Avg."],
                     mode='lines',
-                    name="Daily Cases"
+                    name="7-Day Moving Avg."
                 )
             ],
             'layout' :
@@ -50,7 +44,26 @@ app.layout = html.Div([
                 yaxis={"title" : "Number of Cases"}
             )
         }
-    )
+    ),
+    html.H2("Active Cases", style=heading_style),
+    dcc.Graph(
+        id='active-cases',
+        figure={
+            'data': [
+                go.Bar(
+                    x=df["Reported Date"],
+                    y=df["Total Cases"],
+                    opacity=0.8,
+                    name="Active Cases"
+                )
+            ],
+            'layout' :
+            go.Layout(
+                xaxis={"title" : "Date"},
+                yaxis={"title" : "Number of Cases"}
+            )
+        }
+    ),
 ])
 
 if __name__ == '__main__':
