@@ -21,9 +21,9 @@ heading_style = {"textAlign" : "center"}
 
 app.layout = html.Div([
     html.H1("Ontario COVID-19 Data", style=heading_style),
-    dbc.Card(
+    dbc.Card([
+        dbc.CardHeader(html.H2("Daily Cases", style=heading_style)),
         dbc.CardBody([
-            html.H2("Daily Cases", style=heading_style),
             dcc.Graph(
                 id='daily-cases',
                 figure={
@@ -50,11 +50,10 @@ app.layout = html.Div([
                 }
             ),
         ]),
-        className="w-75 mx-auto"
-    ),
-    dbc.Card(
+    ], className="w-75 mx-auto"),
+    dbc.Card([
+        dbc.CardHeader(html.H2("Active Cases", style=heading_style)),
         dbc.CardBody([
-            html.H2("Active Cases", style=heading_style),
             dcc.Graph(
                 id='active-cases',
                 figure={
@@ -74,11 +73,10 @@ app.layout = html.Div([
                 }
             ),
         ]),
-        className="w-75 mx-auto"
-    ),
-    dbc.Card(
+    ], className="w-75 mx-auto"),
+    dbc.Card([
+        dbc.CardHeader(html.H2("Total Cases", style=heading_style)),
         dbc.CardBody([
-            html.H2("Total Cases", style=heading_style),
             dcc.Graph(
                 id='total-cases',
                 figure={
@@ -98,8 +96,7 @@ app.layout = html.Div([
                 }
             ),
         ]),
-        className="w-75 mx-auto"
-    ),
+    ], className="w-75 mx-auto"),
 ])
 
 if __name__ == '__main__':
