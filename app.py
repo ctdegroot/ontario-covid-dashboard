@@ -34,14 +34,15 @@ app.layout = html.Div([
                 go.Scatter(
                     x=df["Reported Date"],
                     y=df["7-Day Daily Moving Avg."],
-                    mode='lines',
+                    mode="lines",
                     name="7-Day Moving Avg."
                 )
             ],
             'layout' :
             go.Layout(
                 xaxis={"title" : "Date"},
-                yaxis={"title" : "Number of Cases"}
+                yaxis={"title" : "Number of Cases"},
+                legend={"x" : 0, "y" : 1}
             )
         }
     ),
