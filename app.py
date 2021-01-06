@@ -7,6 +7,7 @@ import plotly.graph_objs as go
 import pandas as pd
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app.title = "Ontario COVID-19 Data"
 server = app.server
 
 # Get the data
@@ -20,50 +21,84 @@ heading_style = {"textAlign" : "center"}
 
 app.layout = html.Div([
     html.H1("Ontario COVID-19 Data", style=heading_style),
-    html.H2("Daily Cases", style=heading_style),
-    dcc.Graph(
-        id='daily-cases',
-        figure={
-            'data': [
-                go.Bar(
-                    x=df["Reported Date"],
-                    y=df["Daily Cases"],
-                    opacity=0.8,
-                    name="Daily Cases"
-                ),
-                go.Scatter(
-                    x=df["Reported Date"],
-                    y=df["7-Day Daily Moving Avg."],
-                    mode="lines",
-                    name="7-Day Moving Avg."
-                )
-            ],
-            'layout' :
-            go.Layout(
-                xaxis={"title" : "Date"},
-                yaxis={"title" : "Number of Cases"},
-                legend={"x" : 0, "y" : 1}
-            )
-        }
+    dbc.Card(
+        dbc.CardBody([
+            html.H2("Daily Cases", style=heading_style),
+            dcc.Graph(
+                id='daily-cases',
+                figure={
+                    'data': [
+                        go.Bar(
+                            x=df["Reported Date"],
+                            y=df["Daily Cases"],
+                            opacity=0.8,
+                            name="Daily Cases"
+                        ),
+                        go.Scatter(
+                            x=df["Reported Date"],
+                            y=df["7-Day Daily Moving Avg."],
+                            mode="lines",
+                            name="7-Day Moving Avg."
+                        )
+                    ],
+                    'layout' :
+                    go.Layout(
+                        xaxis={"title" : "Date"},
+                        yaxis={"title" : "Number of Cases"},
+                        legend={"x" : 0, "y" : 1}
+                    )
+                }
+            ),
+        ]),
+        className="w-75 mx-auto"
     ),
-    html.H2("Active Cases", style=heading_style),
-    dcc.Graph(
-        id='active-cases',
-        figure={
-            'data': [
-                go.Bar(
-                    x=df["Reported Date"],
-                    y=df["Total Cases"],
-                    opacity=0.8,
-                    name="Active Cases"
-                )
-            ],
-            'layout' :
-            go.Layout(
-                xaxis={"title" : "Date"},
-                yaxis={"title" : "Number of Cases"}
-            )
-        }
+    dbc.Card(
+        dbc.CardBody([
+            html.H2("Active Cases", style=heading_style),
+            dcc.Graph(
+                id='active-cases',
+                figure={
+                    'data': [
+                        go.Bar(
+                            x=df["Reported Date"],
+                            y=df["Confirmed Positive"],
+                            opacity=0.8,
+                            name="Active Cases"
+                        )
+                    ],
+                    'layout' :
+                    go.Layout(
+                        xaxis={"title" : "Date"},
+                        yaxis={"title" : "Number of Cases"}
+                    )
+                }
+            ),
+        ]),
+        className="w-75 mx-auto"
+    ),
+    dbc.Card(
+        dbc.CardBody([
+            html.H2("Total Cases", style=heading_style),
+            dcc.Graph(
+                id='total-cases',
+                figure={
+                    'data': [
+                        go.Bar(
+                            x=df["Reported Date"],
+                            y=df["Total Cases"],
+                            opacity=0.8,
+                            name="Total Cases"
+                        )
+                    ],
+                    'layout' :
+                    go.Layout(
+                        xaxis={"title" : "Date"},
+                        yaxis={"title" : "Number of Cases"}
+                    )
+                }
+            ),
+        ]),
+        className="w-75 mx-auto"
     ),
 ])
 
