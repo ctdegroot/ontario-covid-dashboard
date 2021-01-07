@@ -6,7 +6,7 @@ import plotly.graph_objs as go
 
 import pandas as pd
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.UNITED])
 app.title = "Ontario COVID-19 Data"
 server = app.server
 
@@ -97,13 +97,13 @@ def get_total_case_plot():
 
 app.layout = dbc.Container(
     [
-        html.H1("Ontario COVID-19 Data", style=heading_style),
         html.Div(
             [
                 dbc.Badge("Last updated: {}".format(last_updated), color="primary", className="mr-1")
             ],
             className="text-right"
         ),
+        html.H1("Ontario COVID-19 Data", style=heading_style),
         dbc.Card(
             [
                 dbc.CardHeader(html.H2("Daily Cases", style=heading_style)),
