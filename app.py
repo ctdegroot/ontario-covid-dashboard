@@ -2,6 +2,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
+from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 
 import pandas as pd
@@ -104,29 +105,51 @@ app.layout = dbc.Container(
             className="text-right"
         ),
         html.H1("Ontario COVID-19 Data", style=heading_style),
-        dbc.Card(
-            [
-                dbc.CardHeader(html.H2("Daily Cases", style=heading_style)),
-                dbc.CardBody(get_daily_case_plot()),
-            ],
-            className="mx-auto"
+        dbc.Row(
+            dbc.Col(
+                dbc.Card(
+                    [
+                        dbc.CardHeader(html.H2("Case Data", style=heading_style)),
+                        dbc.CardBody(
+                            [
+                                dbc.Tabs(
+                                    [
+                                        dbc.Tab(label="Daily", tab_id="daily-cases"),
+                                        dbc.Tab(label="Active", tab_id="active-cases"),
+                                        dbc.Tab(label="Total", tab_id="total-cases"),
+                                    ],
+                                    id="case-tabs",
+                                    active_tab="daily-cases",
+                                ),
+                                html.Div(id="case-tab-content", className="p-4"),
+                            ]
+                        ),
+                    ]
+                )
+            )
         ),
-        dbc.Card(
-            [
-                dbc.CardHeader(html.H2("Active Cases", style=heading_style)),
-                dbc.CardBody(get_active_case_plot()),
-            ],
-            className="mx-auto"
-        ),
-        dbc.Card(
-            [
-                dbc.CardHeader(html.H2("Total Cases", style=heading_style)),
-                dbc.CardBody(get_total_case_plot()),
-            ],
-            className="mx-auto"),
     ],
     fluid=True
 )
+
+@app.callback(
+    Output("case-tab-content", "children"),
+    [Input("case-tabs", "active_tab")],
+)
+
+def render_tab_content(active_tab):
+    """
+    This callback takes the 'active_tab' property as input and renders the tab
+    content depending on what the value of 'active_tab' is.
+    """
+    if active_tab is not None:
+        if active_tab == "daily-cases":
+            return get_daily_case_plot()
+        elif active_tab == "active-cases":
+            return get_active_case_plot()
+        elif active_tab == "total-cases":
+            return get_total_case_plot()
+    return "No case tab selected"
 
 if __name__ == '__main__':
     app.run_server(debug=False)
