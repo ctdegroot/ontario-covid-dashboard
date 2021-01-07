@@ -18,6 +18,35 @@ df["Daily Cases"] = df["Total Cases"].diff()
 df["7-Day Daily Moving Avg."] = df["Daily Cases"].rolling(7).mean()
 
 heading_style = {"textAlign" : "center"}
+bar_opacity = 0.6
+
+def get_bar_chart(x, y, name):
+    return go.Bar(x=x, y=y, opacity=bar_opacity, name=name)
+
+daily_cases = get_bar_chart(
+        df["Reported Date"],
+        df["Daily Cases"],
+        "Daily Cases"
+    )
+
+daily_cases_avg = go.Scatter(
+        x=df["Reported Date"],
+        y=df["7-Day Daily Moving Avg."],
+        mode="lines",
+        name="7-Day Moving Avg."
+    )
+
+active_cases = get_bar_chart(
+        df["Reported Date"],
+        df["Confirmed Positive"],
+        "Active Cases"
+    )
+
+total_cases = get_bar_chart(
+        df["Reported Date"],
+        df["Total Cases"],
+        "Total Cases"
+    )
 
 app.layout = html.Div([
     html.H1("Ontario COVID-19 Data", style=heading_style),
@@ -27,20 +56,7 @@ app.layout = html.Div([
             dcc.Graph(
                 id='daily-cases',
                 figure={
-                    'data': [
-                        go.Bar(
-                            x=df["Reported Date"],
-                            y=df["Daily Cases"],
-                            opacity=0.8,
-                            name="Daily Cases"
-                        ),
-                        go.Scatter(
-                            x=df["Reported Date"],
-                            y=df["7-Day Daily Moving Avg."],
-                            mode="lines",
-                            name="7-Day Moving Avg."
-                        )
-                    ],
+                    'data': [daily_cases, daily_cases_avg],
                     'layout' :
                     go.Layout(
                         xaxis={"title" : "Date"},
@@ -50,21 +66,14 @@ app.layout = html.Div([
                 }
             ),
         ]),
-    ], className="w-75 mx-auto"),
+    ], className="mx-auto"),
     dbc.Card([
         dbc.CardHeader(html.H2("Active Cases", style=heading_style)),
         dbc.CardBody([
             dcc.Graph(
                 id='active-cases',
                 figure={
-                    'data': [
-                        go.Bar(
-                            x=df["Reported Date"],
-                            y=df["Confirmed Positive"],
-                            opacity=0.8,
-                            name="Active Cases"
-                        )
-                    ],
+                    'data': [active_cases],
                     'layout' :
                     go.Layout(
                         xaxis={"title" : "Date"},
@@ -73,21 +82,14 @@ app.layout = html.Div([
                 }
             ),
         ]),
-    ], className="w-75 mx-auto"),
+    ], className="mx-auto"),
     dbc.Card([
         dbc.CardHeader(html.H2("Total Cases", style=heading_style)),
         dbc.CardBody([
             dcc.Graph(
                 id='total-cases',
                 figure={
-                    'data': [
-                        go.Bar(
-                            x=df["Reported Date"],
-                            y=df["Total Cases"],
-                            opacity=0.8,
-                            name="Total Cases"
-                        )
-                    ],
+                    'data': [total_cases],
                     'layout' :
                     go.Layout(
                         xaxis={"title" : "Date"},
@@ -96,7 +98,7 @@ app.layout = html.Div([
                 }
             ),
         ]),
-    ], className="w-75 mx-auto"),
+    ], className="mx-auto"),
 ])
 
 if __name__ == '__main__':
