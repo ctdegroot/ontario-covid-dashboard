@@ -49,61 +49,81 @@ total_cases = get_bar_chart(
         "Total Cases"
     )
 
+case_layout = go.Layout(
+        xaxis={"title" : "Date"},
+        yaxis={"title" : "Number of Cases"},
+        legend={"x" : 0, "y" : 1}
+    )
+
+def get_active_case_plot():
+    return dcc.Graph(
+            id='daily-cases',
+            figure=
+            {
+                'data': [daily_cases, daily_cases_avg],
+                'layout' : case_layout
+            }
+        )
+
+def get_daily_case_plot():
+    return dcc.Graph(
+            id='daily-cases',
+            figure=
+            {
+                'data': [daily_cases, daily_cases_avg],
+                'layout' : case_layout
+            }
+        )
+
+def get_active_case_plot():
+    return dcc.Graph(
+            id='active-cases',
+            figure=
+            {
+                'data': [active_cases],
+                'layout' : case_layout
+            }
+        )
+
+def get_total_case_plot():
+    return dcc.Graph(
+            id='total-cases',
+            figure=
+            {
+                'data': [total_cases],
+                'layout' : case_layout
+            }
+        )
+
 app.layout = dbc.Container(
     [
         html.H1("Ontario COVID-19 Data", style=heading_style),
-        html.Div([
-            dbc.Badge("Last updated: {}".format(last_updated), color="primary", className="mr-1")
-        ], className="text-right"),
-        dbc.Card([
-            dbc.CardHeader(html.H2("Daily Cases", style=heading_style)),
-            dbc.CardBody([
-                dcc.Graph(
-                    id='daily-cases',
-                    figure={
-                        'data': [daily_cases, daily_cases_avg],
-                        'layout' :
-                        go.Layout(
-                            xaxis={"title" : "Date"},
-                            yaxis={"title" : "Number of Cases"},
-                            legend={"x" : 0, "y" : 1}
-                        )
-                    }
-                ),
-            ]),
-        ], className="mx-auto"),
-        dbc.Card([
-            dbc.CardHeader(html.H2("Active Cases", style=heading_style)),
-            dbc.CardBody([
-                dcc.Graph(
-                    id='active-cases',
-                    figure={
-                        'data': [active_cases],
-                        'layout' :
-                        go.Layout(
-                            xaxis={"title" : "Date"},
-                            yaxis={"title" : "Number of Cases"}
-                        )
-                    }
-                ),
-            ]),
-        ], className="mx-auto"),
-        dbc.Card([
-            dbc.CardHeader(html.H2("Total Cases", style=heading_style)),
-            dbc.CardBody([
-                dcc.Graph(
-                    id='total-cases',
-                    figure={
-                        'data': [total_cases],
-                        'layout' :
-                        go.Layout(
-                            xaxis={"title" : "Date"},
-                            yaxis={"title" : "Number of Cases"}
-                        )
-                    }
-                ),
-            ]),
-        ], className="mx-auto"),
+        html.Div(
+            [
+                dbc.Badge("Last updated: {}".format(last_updated), color="primary", className="mr-1")
+            ],
+            className="text-right"
+        ),
+        dbc.Card(
+            [
+                dbc.CardHeader(html.H2("Daily Cases", style=heading_style)),
+                dbc.CardBody(get_daily_case_plot()),
+            ],
+            className="mx-auto"
+        ),
+        dbc.Card(
+            [
+                dbc.CardHeader(html.H2("Active Cases", style=heading_style)),
+                dbc.CardBody(get_active_case_plot()),
+            ],
+            className="mx-auto"
+        ),
+        dbc.Card(
+            [
+                dbc.CardHeader(html.H2("Total Cases", style=heading_style)),
+                dbc.CardBody(get_total_case_plot()),
+            ],
+            className="mx-auto"),
     ],
     fluid=True
 )
