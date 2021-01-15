@@ -5,6 +5,7 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 
+import datetime
 import urllib.request
 import json
 
@@ -15,7 +16,8 @@ app.title = "Ontario COVID-19 Data"
 server = app.server
 
 # Get the data
-url = "https://data.ontario.ca/api/3/action/datastore_search?resource_id=ed270bb8-340b-41f9-a7c6-e8ef587e6d11&limit=1000"
+max_points =  (datetime.datetime.now().date() - datetime.date(2020, 1, 26)).days + 1
+url = "https://data.ontario.ca/api/3/action/datastore_search?resource_id=ed270bb8-340b-41f9-a7c6-e8ef587e6d11&limit={}".format(max_points)
 res = urllib.request.urlopen(url)
 data = json.loads(res.read())
 
