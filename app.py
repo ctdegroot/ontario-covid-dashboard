@@ -21,11 +21,11 @@ data = json.loads(res.read())
 
 # Create the dataframe
 df = pd.read_json(json.dumps(data["result"]["records"]), orient="records")
-print(df)
 df.sort_values(by="_id", inplace=True)
+df["Reported Date"] = pd.to_datetime(df["Reported Date"])
 
 # Get the date of last update
-last_updated = df["Reported Date"].iloc[-1]
+last_updated = df["Reported Date"].iloc[-1].date()
 
 # Case data calculations
 df["Daily Cases"] = df["Total Cases"].diff()
