@@ -231,7 +231,7 @@ def render_case_tab_content(active_tab):
     [Input("death-tabs", "active_tab")],
 )
 
-def render_case_tab_content(active_tab):
+def render_death_tab_content(active_tab):
     """
     This callback takes the 'active_tab' property as input and renders the tab
     content depending on what the value of 'active_tab' is.
