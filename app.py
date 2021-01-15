@@ -5,6 +5,9 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 
+import urllib.request
+import json
+
 import pandas as pd
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.UNITED])
@@ -12,8 +15,14 @@ app.title = "Ontario COVID-19 Data"
 server = app.server
 
 # Get the data
-url = "https://data.ontario.ca/dataset/f4f86e54-872d-43f8-8a86-3892fd3cb5e6/resource/ed270bb8-340b-41f9-a7c6-e8ef587e6d11/download/covidtesting.csv"
-df = pd.read_csv(url)
+url = "https://data.ontario.ca/api/3/action/datastore_search?resource_id=ed270bb8-340b-41f9-a7c6-e8ef587e6d11&limit=1000"
+res = urllib.request.urlopen(url)
+data = json.loads(res.read())
+
+# Create the dataframe
+df = pd.read_json(json.dumps(data["result"]["records"]), orient="records")
+print(df)
+df.sort_values(by="_id", inplace=True)
 
 # Get the date of last update
 last_updated = df["Reported Date"].iloc[-1]
